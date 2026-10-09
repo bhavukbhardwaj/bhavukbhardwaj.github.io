@@ -110,10 +110,10 @@ write('feed.xml', f'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><ch
 PJ = json.loads(re.search(r'var PJ=(\[.*?\]);\n', SRC, re.S).group(1))
 PC = {'platform': 'platforms', 'migration': 'migrations', 'ai': 'AI apps', 'finops': 'FinOps', 'obs': 'observability', 'sec': 'security', 'side': 'side projects'}
 pf = '<button type="button" aria-pressed="true" data-c="top">highlights</button><button type="button" aria-pressed="false" data-c="all">all %d</button>' % len(PJ) + ''.join('<button type="button" aria-pressed="false" data-c="%s">%s</button>' % (k, v) for k, v in PC.items())
+PJ.sort(key=lambda r: -r[4])
 pg = ''.join('<article class="pcard" data-cat="%s" data-top="%d"><span class="route">%s</span><h3>%s</h3><span class="ctx">%s</span><p>%s</p></article>' % (c, f_, PC[c], esc(t), esc(x), esc(b)) for c, t, x, b, f_ in PJ)
 write('projects/index.html', page('Projects | ' + SITE['name'], 'Platforms built, regions launched, migrations led and AI apps shipped.', f'''<main><section class="bp-head"><div class="eyebrow2">/projects &middot; what I built as a lead platform engineer</div><h1 class="bh">Projects &amp; improvements</h1>
-<p class="bsub">Internal platforms, migrations, AI apps and the cost, security and observability work around them. Highlights first, everything behind the filters.</p>
-<div class="filters" id="pfilters" role="group" aria-label="Filter projects">{pf}</div></section><div class="pgrid" id="pgrid">{pg}</div></main>''', 'projects', '/projects/'))
+<p class="bsub">Internal platforms, migrations, AI apps and the cost, security and observability work around them.</p></section><div class="pgrid" id="pgrid">{pg}</div></main>''', 'projects', '/projects/'))
 
 # ---------- home ----------
 hero = SRC[SRC.index('<div class="hero">'):SRC.index('<section id="startups">')]
