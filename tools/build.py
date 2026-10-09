@@ -94,7 +94,7 @@ for i, p in enumerate(posts):
     rows += f'<a class="brow" href="{p["url"]}" data-tags="{esc("|".join(p["tags"]))}" data-q="{esc((p["title"]+" "+p["summary"]+" "+" ".join(p["tags"])).lower())}"><span class="d">{fdate(p["date"])}</span><div><h3>{esc(p["title"])}</h3><p>{esc(p["summary"])}</p></div><div class="meta"><span>{p["minutes"]} min</span>{tags(p)}</div></a>'
 f = posts[0]
 feat = f'<a class="bfeat" id="bfeat" href="{f["url"]}" data-tags="{esc("|".join(f["tags"]))}" data-q="{esc((f["title"]+" "+f["summary"]).lower())}"><div class="meta"><span>Latest &middot; {fdate(f["date"])}</span><span>{f["minutes"]} min</span>{tags(f)}</div><h2>{esc(f["title"])}</h2><p>{esc(f["summary"])}</p></a>'
-blog_body = f'''<main><section class="bp-head"><div class="eyebrow2">/blog &middot; field notes from production</div><h1 class="bh">The blog</h1>
+blog_body = f'''<main><section class="bp-head"><div class="eyebrow2">/blog &middot; field notes from production</div><h1 class="bh">The Blog</h1>
 <p class="bsub">Real incidents, upgrades and cost work from AWS and GCP. New posts land here as I write them. <a href="/feed.xml">RSS feed</a>.</p>
 <div class="bp-tools"><label class="sr" for="q">Search posts</label><input id="q" type="search" placeholder="Search posts, e.g. EKS, Terraform, spot" autocomplete="off"></div>
 <div class="filters" id="bfilters" role="group" aria-label="Filter by category">{chips}</div></section>
@@ -112,7 +112,7 @@ PC = {'platform': 'platforms', 'migration': 'migrations', 'ai': 'AI apps', 'fino
 pf = '<button type="button" aria-pressed="true" data-c="top">highlights</button><button type="button" aria-pressed="false" data-c="all">all %d</button>' % len(PJ) + ''.join('<button type="button" aria-pressed="false" data-c="%s">%s</button>' % (k, v) for k, v in PC.items())
 PJ.sort(key=lambda r: -r[4])
 pg = ''.join('<article class="pcard" data-cat="%s" data-top="%d"><span class="route">%s</span><h3>%s</h3><span class="ctx">%s</span><p>%s</p></article>' % (c, f_, PC[c], esc(t), esc(x), esc(b)) for c, t, x, b, f_ in PJ)
-write('projects/index.html', page('Projects | ' + SITE['name'], 'Platforms built, regions launched, migrations led and AI apps shipped.', f'''<main><section class="bp-head"><div class="eyebrow2">/projects &middot; what I built as a lead platform engineer</div><h1 class="bh">Projects &amp; improvements</h1>
+write('projects/index.html', page('Projects | ' + SITE['name'], 'Platforms built, regions launched, migrations led and AI apps shipped.', f'''<main><section class="bp-head"><div class="eyebrow2">/projects &middot; what I built as a lead platform engineer</div><h1 class="bh">Projects &amp; Improvements</h1>
 <p class="bsub">Internal platforms, migrations, AI apps and the cost, security and observability work around them.</p></section><div class="pgrid" id="pgrid">{pg}</div></main>''', 'projects', '/projects/'))
 
 # ---------- home ----------
@@ -122,15 +122,15 @@ hero = hero.replace('href="#blog-all"', 'href="/blog/"').replace('href="#cv"', '
 startups = sec('startups'); cv = sec('cv').replace('<section id="cv">', '<section id="career">').replace('href="#projects"', 'href="/projects/"')
 stack = sec('stack')
 quote = re.search(r'<div class="quote">.*?</div>', SRC, re.S).group(0)
-latest = '<section id="blog"><div class="sh"><h2>Latest from the blog</h2><p><a href="/blog/">all %d posts &rarr;</a></p></div><div class="posts">%s</div></section>' % (len(posts), ''.join(card(p, i == 0) for i, p in enumerate(posts[:3])))
+latest = '<section id="blog"><div class="sh"><h2>Latest From The Blog</h2><p><a href="/blog/">all %d posts &rarr;</a></p></div><div class="posts">%s</div></section>' % (len(posts), ''.join(card(p, i == 0) for i, p in enumerate(posts[:3])))
 CERTS = re.search(r"var C=(\[.*?\]);\nvar grid", SRC, re.S).group(1)
 C = [[x.strip().strip("'") for x in re.findall(r"'((?:[^'\\]|\\.)*)'|(\d)", row) for x in [x[0] or x[1]]] for row in re.findall(r"\[([^\]]*)\]", CERTS)]
 cg = ''.join(f'<button type="button" class="cert" data-g="{g}" data-top="{t}" data-src="/assets/certs/{fn}.jpg" data-cap="{esc(ti)} &middot; {esc(su)}"><div class="im"><img loading="lazy" alt="{esc(ti)} certificate" src="/assets/certs/{fn}.jpg"></div><div class="tx"><b>{esc(ti)}</b><span>{esc(su)}</span></div></button>' for fn, ti, su, g, t in C)
-certs = f'''<section id="certs"><div class="sh"><h2>Certifications &amp; recognition</h2><p>top picks first</p></div><p class="cnote">Also on my resume: AWS Community Builder.</p>
+certs = f'''<section id="certs"><div class="sh"><h2>Certifications &amp; Recognition</h2></div><p class="cnote">Also on my resume: AWS Community Builder.</p>
 <div class="filters" role="group" aria-label="Filter certificates" id="cf-filters"><button type="button" aria-pressed="true" data-g="top">top picks</button><button type="button" aria-pressed="false" data-g="all">all</button><button type="button" aria-pressed="false" data-g="aws">AWS</button><button type="button" aria-pressed="false" data-g="sec">security &amp; tools</button><button type="button" aria-pressed="false" data-g="award">awards</button><button type="button" aria-pressed="false" data-g="event">events</button><button type="button" aria-pressed="false" data-g="learn">learning</button></div>
 <div class="certs" id="certs-grid">{cg}</div></section>
 <div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Certificate preview"><button type="button" class="lbx" id="lbx" aria-label="Close preview">close</button><figure><img id="lbi" alt=""><figcaption id="lbc"></figcaption></figure></div>'''
-contact = f'''<section id="contact"><div class="sh"><h2>Get in touch</h2><p>{esc(SITE['location'])}</p></div><div class="contact"><dl><dt>Email</dt><dd><a href="mailto:{SITE['email']}">{SITE['email']}</a></dd><dt>LinkedIn</dt><dd><a href="{SITE['linkedin']}">/in/bhavukbhardwaj</a></dd><dt>Source</dt><dd><a href="{SITE['repo']}">this site on GitHub</a></dd></dl>
+contact = f'''<section id="contact"><div class="sh"><h2>Get In Touch</h2><p>{esc(SITE['location'])}</p></div><div class="contact"><dl><dt>Email</dt><dd><a href="mailto:{SITE['email']}">{SITE['email']}</a></dd><dt>LinkedIn</dt><dd><a href="{SITE['linkedin']}">/in/bhavukbhardwaj</a></dd><dt>Source</dt><dd><a href="{SITE['repo']}">this site on GitHub</a></dd></dl>
 <div class="ctab"><p class="bsub">Happy to talk about platform engineering, FinOps, AIOps and building infrastructure from zero.</p><a class="sbtn" href="/feed.xml">Follow the blog by RSS</a></div></div></section>'''
 write('index.html', page(SITE['name'] + ' | ' + SITE['tagline'], SITE['description'], '<main>' + hero + startups + cv + latest + stack + certs + quote + contact + '</main>', 'home', '/'))
 write('404.html', page('Page not found | ' + SITE['name'], 'Page not found', '<main><section class="bp-head"><h1 class="bh">404</h1><p class="bsub">That page does not exist. <a href="/">Go home</a> or <a href="/blog/">read the blog</a>.</p></section></main>'))
