@@ -1,0 +1,444 @@
+<title>NotFromIIT Revamp</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: split hero (copper serif name + live terminal), pipeline-style CV, post grid, stack map. Keeps the current site's black panel, copper Forum serif and white ground. */
+:root{
+  --bg:#faf8f6; --surface:#ffffff; --ink:#0d0d0d; --muted:#5f5a55; --line:#e4dfd9;
+  --panel:#0e0e0e; --panel-ink:#e9e4de; --panel-muted:#8d867e;
+  --copper:#c4673f; --copper-ink:#a9502b; --ok:#2f8f5b;
+  --serif:'Forum',Georgia,serif; --sans:'Hanken Grotesk',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111010; --surface:#191817; --ink:#f1ece6; --muted:#a39c94; --line:#2c2926;
+  --panel:#080808; --copper:#e08457; --copper-ink:#e08457; --ok:#4cc084; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111010; --surface:#191817; --ink:#f1ece6; --muted:#a39c94; --line:#2c2926;
+  --panel:#080808; --copper:#e08457; --copper-ink:#e08457; --ok:#4cc084; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;padding-inline:16px}
+a{color:inherit}
+.wrap{max-width:1120px;margin-inline:auto}
+:focus-visible{outline:2px solid var(--copper);outline-offset:3px}
+
+.banner{max-width:1120px;margin:16px auto 0;padding:10px 14px;border:1px dashed var(--copper);font:12px/1.5 var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:space-between}
+.banner b{color:var(--copper-ink);font-weight:500}
+
+header.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;padding-block:20px}
+.brand{font-family:var(--serif);font-size:22px;text-decoration:none}
+.brand small{display:block;font:12px var(--sans);color:var(--muted);letter-spacing:.04em}
+nav{display:flex;flex-wrap:wrap;gap:4px 22px;align-items:center}
+nav a{text-decoration:none;font-size:14px;padding-block:4px;border-bottom:1px solid transparent}
+nav a:hover,nav a[aria-current]{border-color:var(--copper)}
+.theme{font:12px var(--mono);background:none;border:1px solid var(--line);color:var(--ink);padding:5px 10px;cursor:pointer}
+
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:0;background:var(--panel);color:var(--panel-ink)}
+.who{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.avatar{width:96px;height:96px;border-radius:50%;object-fit:cover;border:2px solid var(--copper);flex:none}
+.hero-l{padding:clamp(24px,5vw,56px);display:flex;flex-direction:column;gap:18px;min-width:0}
+.eyebrow{font:12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--panel-muted)}
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(44px,7vw,84px);line-height:1;margin:0;color:var(--copper);text-wrap:balance}
+.role{font-size:18px;margin:0}
+.lede{color:var(--panel-muted);max-width:52ch;margin:0}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:4px}
+.btn{padding:11px 20px;text-decoration:none;font-size:14px;font-weight:600;border:1px solid var(--copper);color:#0d0d0d;background:var(--copper)}
+.btn.ghost{background:none;color:var(--panel-ink)}
+.btn:hover{filter:brightness(1.1)}
+.hero-r{background:#151311;display:flex;align-items:center;padding:clamp(20px,4vw,48px);min-width:0;border-left:1px solid #2a2622}
+.hero-r .ph{width:100%;height:100%;min-height:280px;display:grid;place-items:center;background:
+  repeating-linear-gradient(45deg,#1e1b19 0 14px,#171513 14px 28px);color:var(--panel-muted);font:12px var(--mono);text-align:center;padding:16px}
+.hero-r .ph span{border:1px solid #3a3531;padding:12px 16px;background:#0e0e0e}
+
+.term{width:100%;margin:0;border:1px solid #2d2926;background:#0a0a0a;font:13px/1.65 var(--mono);color:#cfc8c0;overflow-x:auto}
+.term .bar{display:flex;gap:6px;padding:8px 12px;border-bottom:1px solid #2d2926}
+.term .bar i{width:9px;height:9px;border-radius:50%;background:#3a3531}
+.term pre{margin:0;padding:12px 14px;white-space:pre}
+.p{color:var(--copper)}.g{color:#4cc084}.d{color:#8d867e}
+.cur{display:inline-block;width:8px;height:14px;background:var(--copper);vertical-align:-2px;animation:b 1s steps(1) infinite}
+@keyframes b{50%{opacity:0}}
+
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-top:0;background:var(--surface)}
+.metrics div{padding:18px 20px;border-right:1px solid var(--line)}
+.metrics div:last-child{border:0}
+.metrics strong{display:block;font:400 30px var(--serif);color:var(--copper-ink)}
+.metrics span{font-size:13px;color:var(--muted)}
+
+section{padding-block:clamp(40px,7vw,80px)}
+.sh{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 24px;margin-bottom:28px}
+h2{font:400 clamp(30px,4vw,44px)/1.1 var(--serif);margin:0}
+.sh p{margin:0;color:var(--muted);font:13px var(--mono)}
+
+/* pipeline CV */
+.pipe{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative}
+.stage{padding:0 14px 0 0;min-width:0}
+.stage .node{display:flex;align-items:center;gap:8px;margin-bottom:14px;font:12px var(--mono);color:var(--muted)}
+.stage .node::before{content:"";width:12px;height:12px;border-radius:50%;border:2px solid var(--ok);background:var(--bg);flex:none}
+.stage .node::after{content:"";height:2px;background:var(--line);flex:1}
+.stage:last-child .node::after{display:none}
+.stage.live .node::before{background:var(--copper);border-color:var(--copper);box-shadow:0 0 0 4px color-mix(in srgb,var(--copper) 25%,transparent)}
+.stage h3{font:400 20px/1.2 var(--serif);margin:0 0 2px}
+.stage .co{font-size:14px;color:var(--copper-ink);margin:0 0 6px}
+.stage p{font-size:14px;color:var(--muted);margin:0}
+.proj{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px}
+.proj article{background:var(--surface);border:1px solid var(--line);padding:18px}
+.proj h4{margin:0 0 6px;font:400 19px var(--serif)}
+.proj p{margin:0;font-size:14px;color:var(--muted)}
+.route{font:12px var(--mono);color:var(--copper-ink);margin-bottom:8px;display:block}
+
+/* blog */
+.posts{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.post{background:var(--surface);border:1px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:10px;text-decoration:none;min-width:0}
+.post:hover{border-color:var(--copper)}
+.post.big{grid-column:span 2}
+.meta{display:flex;flex-wrap:wrap;gap:6px;font:12px var(--mono);color:var(--muted)}
+.tag{border:1px solid var(--line);padding:1px 8px}
+.post h3{font:400 clamp(20px,2.2vw,26px)/1.25 var(--serif);margin:0;text-wrap:balance}
+.post p{margin:0;color:var(--muted);font-size:15px}
+.more{margin-top:20px;font:13px var(--mono)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.filters button{font:12px var(--mono);background:none;border:1px solid var(--line);color:var(--ink);padding:5px 12px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--copper);border-color:var(--copper);color:#0d0d0d}
+
+/* stack map */
+.stack{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);background:var(--surface)}
+.stack>div{padding:18px 20px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-width:0}
+.stack h4{font:12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--copper-ink);margin:0 0 10px;font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{font-size:13px;padding:2px 9px;border:1px solid var(--line);background:var(--bg)}
+
+.cnote{margin:-12px 0 20px;font-size:14px;color:var(--muted)}
+.certs{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.cert{background:var(--surface);border:1px solid var(--line);padding:0;text-align:left;cursor:pointer;color:inherit;font:inherit;display:flex;flex-direction:column;min-width:0}
+.cert:hover{border-color:var(--copper)}
+.cert .im{aspect-ratio:4/3;background:#1a1816;display:grid;place-items:center;overflow:hidden;border-bottom:1px solid var(--line)}
+.cert img{width:100%;height:100%;object-fit:contain;display:block}
+.cert .tx{padding:12px 14px 14px;display:flex;flex-direction:column;gap:2px}
+.cert b{font:400 18px/1.25 var(--serif)}
+.cert span{font:12px var(--mono);color:var(--muted)}
+.cert[hidden]{display:none}
+.lb{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.88);display:grid;place-items:center;padding:56px 16px 24px}
+.lb[hidden]{display:none}
+.lb figure{margin:0;max-width:min(980px,100%);max-height:100%;display:flex;flex-direction:column;gap:10px;align-items:center}
+.lb img{max-width:100%;max-height:78vh;background:#fff}
+.lb figcaption{color:#e9e4de;font:13px var(--mono);text-align:center}
+.lbx{position:absolute;top:12px;right:16px;font:13px var(--mono);background:none;border:1px solid #5a534c;color:#e9e4de;padding:6px 12px;cursor:pointer}
+
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.eyebrow2{font:12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.bp-head{padding-block:clamp(28px,5vw,56px) 12px;display:flex;flex-direction:column;gap:14px}
+.bh{font:400 clamp(44px,7vw,80px)/1 var(--serif);margin:0;color:var(--copper-ink)}
+.bsub{margin:0;color:var(--muted);max-width:56ch}
+.bp-tools{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.bp-tools>input{flex:1 1 280px;width:auto}
+.bsub-form{display:flex;gap:8px;flex:1 1 320px}
+.bsub-form input{flex:1;min-width:0}
+.bsub-form .btn{cursor:pointer;color:#0d0d0d;white-space:nowrap}
+.bfeat{display:grid;grid-template-columns:1fr;gap:10px;background:var(--panel);color:var(--panel-ink);padding:clamp(22px,4vw,40px);text-decoration:none;margin-block:8px 28px;border:1px solid var(--panel)}
+.bfeat:hover{border-color:var(--copper)}
+.bfeat h2{font:400 clamp(26px,4vw,40px)/1.15 var(--serif);margin:0;color:var(--copper);text-wrap:balance}
+.bfeat p{margin:0;color:var(--panel-muted);max-width:60ch}
+.bfeat .meta,.bfeat .tag{color:var(--panel-muted);border-color:#38332e}
+.blist{display:flex;flex-direction:column}
+.yr{font:12px var(--mono);letter-spacing:.12em;color:var(--muted);padding-block:22px 8px;border-bottom:1px solid var(--line)}
+.brow{display:grid;grid-template-columns:110px 1fr auto;gap:8px 24px;padding-block:18px;border-bottom:1px solid var(--line);text-decoration:none;align-items:baseline}
+.brow:hover h3{color:var(--copper-ink)}
+.brow .d{font:12px var(--mono);color:var(--muted)}
+.brow h3{font:400 clamp(19px,2.2vw,24px)/1.25 var(--serif);margin:0}
+.brow p{margin:4px 0 0;color:var(--muted);font-size:15px}
+.brow .meta{justify-content:flex-end}
+.empty{padding:32px 0;color:var(--muted);font:13px var(--mono)}
+.next{margin-block:32px 60px;border:1px dashed var(--line);padding:20px;display:flex;flex-direction:column;gap:4px;color:var(--muted)}
+.next b{font:400 22px var(--serif);color:var(--ink)}
+.next .route{margin:0}
+
+.ptease{display:flex;flex-wrap:wrap;gap:16px 32px;justify-content:space-between;align-items:center;margin-top:36px;padding:22px 24px;background:var(--surface);border:1px solid var(--line);text-decoration:none}
+.ptease:hover{border-color:var(--copper)}
+.ptease b{display:block;font:400 clamp(20px,2.4vw,26px)/1.25 var(--serif);margin-block:4px}
+.ptease .pt{font-size:14px;color:var(--muted)}
+.ptease .go{font:13px var(--mono);color:var(--copper-ink)}
+.pgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-block:12px 40px}
+.pcard{background:var(--surface);border:1px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.pcard .route{margin:0}
+.pcard h3{font:400 clamp(20px,2.2vw,24px)/1.25 var(--serif);margin:0}
+.pcard .ctx{font:12px var(--mono);color:var(--muted)}
+.pcard p{margin:6px 0 0;color:var(--muted);font-size:15px}
+.fn{padding-block:20px 60px}
+.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.fnote{border-top:2px solid var(--copper);padding-top:12px}
+.fnote p{margin:6px 0 0;font-size:15px;color:var(--muted)}
+
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.sc{background:var(--surface);border:1px solid var(--line);padding:18px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.sc.live{border-color:var(--copper)}
+.sc .route{margin:0}
+.sc h3{font:400 22px/1.2 var(--serif);margin:0}
+.sc p{margin:0;font-size:14.5px;color:var(--muted);flex:1}
+.role-tag{font:12px var(--mono);color:var(--copper-ink);border-top:1px solid var(--line);padding-top:10px;margin-top:8px}
+.vibe{list-style:none;padding:0;margin:28px 0 0;display:grid;grid-template-columns:repeat(2,1fr);gap:10px 32px}
+.vibe li{border-left:2px solid var(--copper);padding-left:14px;color:var(--muted)}
+.vibe b{color:var(--ink);font-weight:600}
+.quote{border-block:1px solid var(--line);padding-block:44px;text-align:center}
+.quote q{font:400 clamp(24px,3.6vw,38px)/1.25 var(--serif);display:block;max-width:24em;margin-inline:auto;text-wrap:balance}
+.quote cite{display:block;margin-top:12px;font:13px var(--mono);color:var(--muted);font-style:normal}
+
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.contact dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:8px 20px}
+.contact dt{font:12px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.contact dd{margin:0;overflow-wrap:anywhere}
+form{display:flex;flex-direction:column;gap:12px}
+label{font:12px var(--mono);color:var(--muted)}
+input{font:inherit;padding:11px 12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);width:100%}
+form .btn{cursor:pointer;align-self:flex-start;color:#0d0d0d}
+.ok{font:13px var(--mono);color:var(--ok);min-height:1.4em}
+footer{border-top:1px solid var(--line);padding-block:24px 40px;font:12px var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}
+
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr}.hero-r{border-left:0;border-top:1px solid #2a2622}
+  .metrics{grid-template-columns:repeat(2,1fr)}.metrics div:nth-child(2){border-right:0}.metrics div:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .pipe{grid-template-columns:1fr;gap:22px}.stage .node::after{display:none}
+  .proj,.posts,.stack,.contact{grid-template-columns:1fr}.certs{grid-template-columns:repeat(2,1fr)}.post.big{grid-column:auto}
+  .stack>div{border-right:0}
+  .pgrid,.fgrid{grid-template-columns:1fr}.pipe{grid-template-columns:1fr}
+  .sgrid,.vibe{grid-template-columns:1fr}
+  .brow{grid-template-columns:1fr}.brow .meta{justify-content:flex-start}.bsub-form{flex-basis:100%}
+}
+@media (prefers-reduced-motion:reduce){.cur{animation:none}}
+</style>
+
+<div class="banner"><span><b>MOCKUP</b> · proposed revamp of notfromiit.com, nothing here is published to Wix</span><span>content pulled from the live site, 8 Oct 2026</span></div>
+
+<div class="wrap">
+<header class="top">
+  <a class="brand" href="#top">Bhavuk Bhardwaj<small>Lead DevOps Engineer | Founding Member @ Astuto.ai</small></a>
+  <nav aria-label="Main">
+    <a href="#top">Home</a><a href="#blog-all" data-nav="blog">Blog</a><a href="#projects" data-nav="projects">Projects</a><a href="#cv">Resume</a><a href="#certs">Certifications</a><a href="#notes">Notes</a><a href="#contact">Contact</a>
+    <button class="theme" id="theme" type="button" aria-label="Toggle light and dark theme">theme</button>
+  </nav>
+</header>
+
+<main id="top">
+<div class="hero">
+  <div class="hero-l">
+    <div class="who"><img class="avatar" id="avatar" alt="Portrait of Bhavuk Bhardwaj" width="96" height="96"><div><div class="eyebrow">Bangalore · AWS · GCP · Kubernetes</div><h1>Bhavuk<br>Bhardwaj</h1></div></div>
+    <p class="role">AWS DevOps &amp; Cloud Infrastructure Specialist</p>
+    <p class="lede">Founding DevOps member and startup builder. I build production infrastructure from day zero for product companies: Kubernetes, Terraform, SOC2 and ISO compliance, FinOps, and AIOps with custom MCP servers. This site is where I document what actually broke and what fixed it.</p>
+    <div class="cta"><a class="btn" href="#blog-all">Read the blog</a><a class="btn ghost" href="#cv">View resume</a></div>
+  </div>
+  <div class="hero-r">
+    <div class="term" role="img" aria-label="Terminal showing a whoami command and current work">
+      <div class="bar"><i></i><i></i><i></i></div>
+<pre><span class="p">bhavuk@portfolio</span>:<span class="d">~</span>$ whoami --verbose
+role      lead-devops @ astuto.ai (since 2023-10)
+focus     platform · finops · aiops · soc2/iso
+clouds    aws · gcp (azure for ai)
+mcp       cost-optimization · gcp-monitoring · grafana
+status    <span class="g">● all systems nominal</span>
+
+<span class="p">bhavuk@portfolio</span>:<span class="d">~</span>$ cat now.txt
+building  mcp servers for cost + observability
+reading   eks internals, karpenter, ebpf
+writing   <span class="g">field notes from production</span> → /blog
+
+<span class="p">bhavuk@portfolio</span>:<span class="d">~</span>$ <span class="cur"></span></pre>
+    </div>
+  </div>
+</div>
+<div class="metrics" aria-label="Career at a glance">
+  <div><strong>8 yrs</strong><span>running cloud infrastructure on AWS and GCP</span></div>
+  <div><strong>$10M+</strong><span>annual cloud savings enabled across 100+ customers</span></div>
+  <div><strong>4</strong><span>product startups: insurance, CRM, recruitment, DevOps and FinOps</span></div>
+  <div><strong>SOC2 + ISO</strong><span>compliance built into the platform</span></div>
+</div>
+
+<section id="startups">
+  <div class="sh"><h2>Built inside product startups</h2><p>four domains · always close to the product</p></div>
+  <div class="sgrid">
+    <article class="sc"><span class="route">Insurance</span><h3>Inube Solutions</h3><p>The first AWS cloud, built from scratch. Monolith to microservices, with CI/CD on day one.</p><span class="role-tag">first engineer on cloud</span></article>
+    <article class="sc"><span class="route">CRM</span><h3>Leadsquared</h3><p>Solved the scalability problems on the way to unicorn, and opened new AWS regions in the EU and Southeast Asia for expansion.</p><span class="role-tag">grew into a lead</span></article>
+    <article class="sc"><span class="route">Recruitment</span><h3>HeyJobs</h3><p>Improved DevOps practices, ran multi-region infrastructure as code, and delivered ISO and SOC 2.</p><span class="role-tag">raised the bar</span></article>
+    <article class="sc live"><span class="route">DevOps &amp; FinOps product</span><h3>Astuto.ai</h3><p>Founding DevOps member. Built the DevOps, SRE, platform, infosec and AIOps functions from zero.</p><span class="role-tag">founding member</span></article>
+  </div>
+  <ul class="vibe">
+    <li><b>Zero to one.</b> I am comfortable when there is no platform yet.</li>
+    <li><b>Owner mindset.</b> I make the infrastructure call and live with it in production.</li>
+    <li><b>Cost and speed together.</b> Cheap to run, fast to ship, safe to audit.</li>
+    <li><b>Close to customers.</b> Customer feedback shapes what I build next.</li>
+  </ul>
+</section>
+
+<section id="cv">
+  <div class="sh"><h2>Career, as a pipeline</h2><p>pipeline: bhavuk/career · last run: success</p></div>
+  <div class="pipe">
+    <div class="stage"><div class="node">Jul 2018 · intern</div><h3>Data Analyst Intern</h3><p class="co">Fiabilite Network Solutions</p><p>Bangalore. First step into data and infrastructure.</p></div>
+    <div class="stage"><div class="node">Dec 2018 – Oct 2020 · build</div><h3>Full Stack Developer</h3><p class="co">Inube Solutions · Insurance</p><p>Led the monolith to microservices move (.NET Core, React, AWS). Set up the company's first AWS cloud and CI/CD.</p></div>
+    <div class="stage"><div class="node">Oct 2020 – Jan 2023 · scale</div><h3>Sr. AWS DevOps Engineer</h3><p class="co">Leadsquared · CRM · unicorn</p><p>Solved the scalability challenges as the company grew into a unicorn, which took me into a lead role. Set up infrastructure in new AWS regions in the EU and Southeast Asia to support business expansion.</p></div>
+    <div class="stage"><div class="node">Jan – Oct 2023 · harden</div><h3>Infrastructure Engineer</h3><p class="co">HeyJobs, Berlin · Recruitment</p><p>Researched and improved DevOps practices. Managed multi-cloud, multi-region infrastructure with a large Infrastructure as Code codebase. Delivered ISO and SOC 2 compliance.</p></div>
+    <div class="stage live"><div class="node">Oct 2023 – now · running</div><h3>Lead DevOps Engineer</h3><p class="co">Astuto.ai · DevOps and FinOps product · Founding member</p><p>Built the first DevOps, SRE, platform, infosec and AIOps functions. Multi-cloud EKS and GKE on Terraform.</p></div>
+  </div>
+  <a class="ptease" href="#projects"><div><span class="route">projects &amp; improvements</span><b>Platforms built, regions launched, migrations led, AI apps shipped</b><span class="pt">Internal platforms · India, US and Malaysia regions on AWS and GCP · AWS to GCP migrations · MCP servers and LLM agents · FinOps · SOC2 and ISO</span></div><span class="go">See all projects →</span></a>
+</section>
+
+<section id="blog">
+  <div class="sh"><h2>Latest from the blog</h2><p><a href="#blog-all">all 9 posts →</a></p></div>
+  <div class="posts" id="posts">
+    <a class="post big" data-c="EKS" href="https://www.notfromiit.com/post/eks-1-32-1-33-upgrade-real-production-lessons-from-migration"><div class="meta"><span>Jun 14, 2026</span><span>4 min</span><span class="tag">EKS</span></div><h3>EKS 1.32 → 1.33 Upgrade: Real Production Lessons from Migration</h3><p>A routine cluster upgrade turned into a major OS transition from Amazon Linux 2 to Amazon Linux 2023.</p></a>
+    <a class="post" data-c="AWS GCP FinOps" href="https://www.notfromiit.com/post/saving-money-on-cloud-bills-spot-vs-on-demand-on-multi-cloud-aws-and-google-cloud"><div class="meta"><span>Jun 14, 2026</span><span>4 min</span><span class="tag">FinOps</span></div><h3>Spot vs. On-Demand on AWS and Google Cloud</h3><p>Up to 90% off, with hybrid strategies for when capacity is reclaimed.</p></a>
+    <a class="post" data-c="AWS DevOps Tool" href="https://www.notfromiit.com/post/automate-monitoring-for-stopped-ecs-container-using-event-driven-system-aws"><div class="meta"><span>Jun 24, 2023</span><span>3 min</span><span class="tag">AWS</span><span class="tag">DevOps Tool</span></div><h3>Monitoring stopped ECS containers with EventBridge</h3><p>An event-driven alert system for ECS tasks.</p></a>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="sh"><h2>The stack</h2><p>grouped as in the resume</p></div>
+  <div class="stack">
+    <div><h4>Cloud</h4><div class="chips"><span>AWS</span><span>GCP</span><span>EC2</span><span>ECS</span><span>Lambda</span><span>Fargate</span><span>Route 53</span><span>Cloud SQL</span><span>IAP</span></div></div>
+    <div><h4>Kubernetes &amp; containers</h4><div class="chips"><span>EKS</span><span>GKE</span><span>Docker</span><span>Helm</span><span>Sidecar pattern</span><span>Ambassador pattern</span><span>Operators</span></div></div>
+    <div><h4>IaC &amp; CI/CD</h4><div class="chips"><span>Terraform</span><span>Terragrunt</span><span>CloudFormation</span><span>GitHub Actions</span><span>CircleCI</span><span>CodePipeline</span><span>Atlantis</span></div></div>
+    <div><h4>AI &amp; data</h4><div class="chips"><span>LLMs</span><span>MCP servers</span><span>Azure OpenAI Studio</span><span>Dagster</span><span>Apache NiFi</span><span>Superset</span><span>Streamlit</span></div></div>
+    <div><h4>Observability</h4><div class="chips"><span>Prometheus</span><span>Grafana</span><span>Loki</span><span>Promtail</span><span>FluentBit</span><span>CloudWatch</span><span>OpenSearch</span><span>Sumologic</span></div></div>
+    <div><h4>Security &amp; compliance</h4><div class="chips"><span>SOC2</span><span>ISO</span><span>Well-Architected</span><span>IAM</span><span>Workload Identity</span><span>GuardDuty</span><span>Trivy</span><span>tfsec</span><span>Vanta</span><span>Scrut.io</span></div></div>
+  </div>
+</section>
+
+<section id="certs">
+  <div class="sh"><h2>Certifications &amp; recognition</h2><p>19 on the old site · top picks first</p></div>
+  <p class="cnote">Also on the latest resume: AWS Community Builder (no image on the current site yet).</p>
+  <div class="filters" role="group" aria-label="Filter certificates" id="cf-filters">
+    <button type="button" aria-pressed="true" data-g="top">top picks</button><button type="button" aria-pressed="false" data-g="all">all</button><button type="button" aria-pressed="false" data-g="aws">AWS</button><button type="button" aria-pressed="false" data-g="sec">security &amp; tools</button><button type="button" aria-pressed="false" data-g="award">awards</button><button type="button" aria-pressed="false" data-g="event">events</button><button type="button" aria-pressed="false" data-g="learn">learning</button>
+  </div>
+  <div class="certs" id="certs-grid"></div>
+</section>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Certificate preview"><button type="button" class="lbx" id="lbx" aria-label="Close preview">close</button><figure><img id="lbi" alt=""><figcaption id="lbc"></figcaption></figure></div>
+
+<section id="notes">
+  <div class="sh"><h2>Notes: Serverless Diary</h2><p>free PDF</p></div>
+  <div class="proj" style="grid-template-columns:2fr 1fr;margin:0">
+    <article><span class="route">lambda · event-driven · cost</span><h4>Serverless Diary</h4><p>The key serverless concepts demystified, with practical tips. Learn how AWS Lambda lets you build applications without worrying about servers while keeping scale and cost under control.</p></article>
+    <article><span class="route">get the PDF</span><form id="nf"><label for="nemail">Email</label><input id="nemail" type="email" placeholder="you@company.com" required><button class="btn" type="submit">Send me the PDF</button><div class="ok" id="nok" role="status"></div></form></article>
+  </div>
+</section>
+
+<div class="quote"><q>Writing code is easy. Running it in production is what makes it challenging.</q><cite>Bhavuk</cite></div>
+
+<section id="contact">
+  <div class="sh"><h2>Get in touch</h2><p>Bangalore, Karnataka</p></div>
+  <div class="contact">
+    <dl><dt>Email</dt><dd>bhavukbhardwaj03@gmail.com</dd><dt>Phone</dt><dd>+91-8147-136986</dd><dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/bhavukbhardwaj">/in/bhavukbhardwaj</a></dd></dl>
+    <form id="cf"><label for="cn">Name</label><input id="cn" required><label for="ce">Email</label><input id="ce" type="email" required><button class="btn" type="submit">Send message</button><div class="ok" id="cok" role="status"></div></form>
+  </div>
+</section>
+</main>
+
+<div id="projpage" hidden>
+  <section class="bp-head">
+    <div class="eyebrow2">/projects · what I built as a lead platform engineer</div>
+    <h1 class="bh">Projects &amp; improvements</h1>
+    <p class="bsub">Internal platforms, migrations, AI apps and the cost, security and observability work around them. Highlights first, everything behind the filters.</p>
+    <div class="filters" id="pfilters" role="group" aria-label="Filter projects"></div>
+  </section>
+  <div class="pgrid" id="pgrid"></div>
+</div>
+
+<div id="blogpage" hidden>
+  <section class="bp-head">
+    <div class="eyebrow2">/blog · field notes from production</div>
+    <h1 class="bh">The blog</h1>
+    <p class="bsub">Real incidents, upgrades and cost work from AWS and GCP. New posts land here as I write them.</p>
+    <div class="bp-tools">
+      <label class="sr" for="q">Search posts</label>
+      <input id="q" type="search" placeholder="Search posts, e.g. EKS, Terraform, spot" autocomplete="off">
+      <form id="bf" class="bsub-form"><label class="sr" for="bemail">Email for new posts</label><input id="bemail" type="email" placeholder="get new posts by email" required><button class="btn" type="submit">Subscribe</button></form>
+    </div>
+    <div class="ok" id="bok" role="status"></div>
+    <div class="filters" id="bfilters" role="group" aria-label="Filter by category"></div>
+  </section>
+  <div id="bfeat"></div>
+  <div id="blist" class="blist"></div>
+  <div class="next" id="bnext"><span class="route">next up</span><b>Your next post goes here</b><span>Each new post you publish on Wix appears at the top of this page automatically in the real build.</span></div>
+</div>
+<footer><span>© 2019 – 2026 Bhavuk Bhardwaj</span><span>Revamp mockup · not live</span></footer>
+</div>
+
+<script>
+var IMG=/*IMG*/{};
+document.getElementById('avatar').src=IMG.me;
+var root=document.documentElement;
+document.getElementById('theme').addEventListener('click',function(){
+  var dark=root.getAttribute('data-theme')==='dark'||(!root.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme:dark)').matches);
+  root.setAttribute('data-theme',dark?'light':'dark');
+});
+var P=[
+['2026-06-14','EKS 1.32 → 1.33 Upgrade: Real Production Lessons from Migration','A routine cluster upgrade turned into a major OS transition from Amazon Linux 2 to Amazon Linux 2023.',['EKS'],4,'https://www.notfromiit.com/post/eks-1-32-1-33-upgrade-real-production-lessons-from-migration'],
+['2026-06-14','Saving Money on Cloud Bills: Spot vs. On-Demand on AWS and Google Cloud','Up to 90% off, with hybrid strategies for when the provider reclaims capacity.',['AWS','GCP','FinOps'],4,'https://www.notfromiit.com/post/saving-money-on-cloud-bills-spot-vs-on-demand-on-multi-cloud-aws-and-google-cloud'],
+['2023-06-24','Automate Monitoring for Stopped ECS Containers with EventBridge','An event-driven alert system for stopped ECS tasks on AWS.',['AWS','DevOps Tool'],3,'https://www.notfromiit.com/post/automate-monitoring-for-stopped-ecs-container-using-event-driven-system-aws'],
+['2023-06-18','Redefining EC2 Connectivity: EIC Endpoint vs Instance Connect and SSM','Secure connection to instances and VPC resources from the internet.',['AWS'],2,'https://www.notfromiit.com/blog'],
+['2023-06-11','AWS Verified Access vs. VPN','Zero Trust access in the cloud era.',['AWS'],4,'https://www.notfromiit.com/blog'],
+['2023-06-06','Talisman: Security Check as a Pre-commit Hook','Install options and configuration for secret scanning before code leaves your laptop.',['DevOps Tool'],3,'https://www.notfromiit.com/blog'],
+['2023-04-10','Infrastructure Coding Made Simple with GitHub Copilot and Terraform','AI assistance inside infrastructure-as-code workflows.',['Terraform','DevOps Tool'],3,'https://www.notfromiit.com/blog'],
+['2021-08-21','What does Cluster-Level Delete Protection on Aurora mean?','What the setting does and why you want it enabled.',['AWS'],2,'https://www.notfromiit.com/blog'],
+['2021-02-25','Linux AWK Commands Practice 1','The commonly used AWK commands, with practice.',['Linux'],2,'https://www.notfromiit.com/blog']];
+function fd(s){var d=new Date(s+'T00:00:00');return d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}
+function tags(a){return a.map(function(t){return '<span class="tag">'+t+'</span>'}).join('')}
+var bq='',bc='all';
+var cats=['all'];P.forEach(function(p){p[3].forEach(function(t){if(cats.indexOf(t)<0)cats.push(t)})});
+var bfl=document.getElementById('bfilters');
+cats.forEach(function(c){var n=c==='all'?P.length:P.filter(function(p){return p[3].indexOf(c)>-1}).length;var b=document.createElement('button');b.type='button';b.dataset.c=c;b.textContent=c+' '+n;b.setAttribute('aria-pressed',c==='all');b.addEventListener('click',function(){bc=c;renderBlog()});bfl.appendChild(b)});
+function renderBlog(){
+  bfl.querySelectorAll('button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.c===bc)});
+  var rows=P.filter(function(p){return (bc==='all'||p[3].indexOf(bc)>-1)&&(!bq||(p[1]+' '+p[2]+' '+p[3].join(' ')).toLowerCase().indexOf(bq)>-1)});
+  var feat=document.getElementById('bfeat'),list=document.getElementById('blist'),out='';
+  var showFeat=bc==='all'&&!bq&&rows.length;
+  feat.innerHTML=showFeat?'<a class="bfeat" href="'+rows[0][5]+'"><div class="meta"><span>Latest · '+fd(rows[0][0])+'</span><span>'+rows[0][4]+' min</span>'+tags(rows[0][3])+'</div><h2>'+rows[0][1]+'</h2><p>'+rows[0][2]+'</p></a>':'';
+  var rest=showFeat?rows.slice(1):rows,yr='';
+  rest.forEach(function(p){var y=p[0].slice(0,4);if(y!==yr){yr=y;out+='<div class="yr">'+y+'</div>'}
+    out+='<a class="brow" href="'+p[5]+'"><span class="d">'+fd(p[0])+'</span><div><h3>'+p[1]+'</h3><p>'+p[2]+'</p></div><div class="meta"><span>'+p[4]+' min</span>'+tags(p[3])+'</div></a>'});
+  list.innerHTML=out||'<div class="empty">No posts match that search.</div>';
+}
+document.getElementById('q').addEventListener('input',function(e){bq=e.target.value.trim().toLowerCase();renderBlog()});
+document.getElementById('bf').addEventListener('submit',function(e){e.preventDefault();document.getElementById('bok').textContent='Mockup only. Nothing was sent.'});
+renderBlog();
+var PJ=[["platform","Multi-region, multi-cloud setup","India · US · Malaysia","Set up regional environments in India, the US and Malaysia on EKS and GKE, across AWS and GCP.",1],["platform", "Day-0 platform and teams", "Astuto.ai", "Set up the company's first DevOps, SRE, platform engineering, infosec and AIOps functions and systems, end to end.", 1], ["platform", "Multi-cloud container fleet", "Astuto.ai", "Secure EKS, GKE, ECS, EC2 and Fargate fleet managed through Facets Cloud, with reusable Terraform modules for EKS, ECS, Route 53 and networking.", 0], ["platform", "CI/CD governance and GitOps", "Astuto.ai", "First org-wide governance through reusable GitHub Actions, GitOps for observability configs and automated pre-commit secret scanning.", 0], ["platform", "Kubernetes patterns in production", "Astuto.ai", "Sidecar pattern for logging and Ambassador pattern for a PgBouncer proxy, across EKS and GKE.", 0], ["platform", "ADRs and living runbooks", "Astuto.ai", "Introduced Architecture Decision Records and runbooks to build a learning-first engineering culture.", 0], ["migration", "Container platform evolution", "ECS Fargate \u2192 ECS EC2 \u2192 EKS \u2192 GKE", "Moved workloads through four compute generations as cost and scale needs changed.", 1], ["migration", "AWS to GCP migration", "RDS Postgres and EKS \u2192 Cloud SQL and GKE", "Migrated databases and workloads, with secure VPC networking between AWS and GCP.", 1], ["migration", "Monolith to microservices", "Inube Solutions", "Led the move to microservices on .NET Core, React and AWS, and set up the company's first AWS accounts and CI/CD.", 0], ["migration", "Regional expansion on AWS", "Leadsquared · EU and Southeast Asia", "Set up infrastructure in new AWS regions in the EU and Southeast Asia with CloudFormation and Terraform, supporting the company's business expansion.", 0], ["ai", "Custom MCP servers for AIOps", "Astuto.ai", "MCP servers for cost optimization, GCP Monitoring and Grafana, so LLMs can help troubleshoot infrastructure from the CLI.", 1], ["ai", "LLM agents for FinOps policies", "Astuto.ai", "Gen AI agents that generate cost-optimization policies and recommendations across AWS, Azure and GCP.", 0], ["ai", "AI-generated infrastructure code", "Astuto.ai", "Workflows that generate Terraform modules, Kubernetes manifests and CI/CD templates, cutting manual deployment effort.", 0], ["ai", "Org-wide AI adoption", "Astuto.ai", "Rolled out Cursor, Claude and a context engine, with Azure OpenAI Studio configured for enterprise AIOps.", 0], ["finops", "$10M+ in annual savings enabled", "Astuto.ai", "Used hands-on DevOps experience and feedback from 100+ customers to steer the product roadmap behind those savings.", 1], ["finops", "Aurora replica lifecycle automation", "Cost automation", "Automation that removes replicas nobody needs, cutting unnecessary database spend.", 0], ["finops", "Storage optimization pipelines", "Astuto.ai", "Pipelines for database storage optimization and data cleanup.", 0], ["obs", "Observability from zero", "Astuto.ai", "The first stack: Prometheus, Grafana, Loki and Promtail through Helm on EKS and GKE, giving real-time visibility across every microservice.", 1], ["obs", "Centralized logging", "Leadsquared", "One logging and monitoring view across RDS, Redis, Elasticsearch and EC2.", 0], ["sec", "SOC2 and ISO, built into delivery", "Astuto.ai", "DevSecOps with Trivy, Talisman and Scrut.io, aligned to the AWS Well-Architected Framework.", 0], ["sec", "Multi-account security governance", "Cross-account tooling", "Audit tooling that watches IAM, security groups and DNS across accounts.", 0], ["sec", "Internal security automation", "Leadsquared", "Tools built with the security team to find vulnerabilities and improve cloud security posture.", 0], ["side", "PulseCard", "Side project", "Weekly branded image card per DevOps and cloud topic, from real sources only (RSS, GitHub Releases, Hacker News), summarized by a local Ollama model and rendered with HTML, CSS and Playwright. Sized for LinkedIn and YouTube Shorts.", 1], ["side", "Spotlight", "Inside PulseCard", "A deep-dive card for one real release: Impact, Who cares, What changes, Action. Analysis, not restated vendor news.", 0], ["side", "SignalForge", "Side project, in progress", "Built phase by phase in Docker Compose with tests at each step. Phases 0 to 2 are done; RAG with pgvector is next.", 0]];
+var pcats={all:'highlights',platform:'platforms',migration:'migrations',ai:'AI apps',finops:'FinOps',obs:'observability',sec:'security',side:'side projects'};
+var pc='top',pf=document.getElementById('pfilters'),pg=document.getElementById('pgrid');
+[['top','highlights'],['all','all '+PJ.length]].concat(Object.keys(pcats).slice(1).map(function(k){return [k,pcats[k]]})).forEach(function(c){var b=document.createElement('button');b.type='button';b.dataset.c=c[0];b.textContent=c[1];b.addEventListener('click',function(){pc=c[0];renderP()});pf.appendChild(b)});
+function renderP(){pf.querySelectorAll('button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.c===pc)});
+  pg.innerHTML=PJ.filter(function(p){return pc==='all'||(pc==='top'?p[4]===1:p[0]===pc)}).map(function(p){return '<article class="pcard"><span class="route">'+pcats[p[0]]+'</span><h3>'+p[1]+'</h3><span class="ctx">'+p[2]+'</span><p>'+p[3]+'</p></article>'}).join('')}
+renderP();
+var mainEl=document.getElementById('top'),bpage=document.getElementById('blogpage');
+var pp=document.getElementById('projpage');
+function route(){var hs=location.hash,onB=hs==='#blog-all',onP=hs==='#projects';mainEl.hidden=onB||onP;bpage.hidden=!onB;pp.hidden=!onP;
+  document.querySelectorAll('nav a').forEach(function(a){a.removeAttribute('aria-current')});
+  var cur=document.querySelector(onB?'nav a[data-nav="blog"]':onP?'nav a[data-nav="projects"]':'nav a[href="#top"]');if(cur&&(onB||onP||!hs||hs==='#top'))cur.setAttribute('aria-current','page');
+  if(onB||onP)scrollTo(0,0);else if(hs){var t=document.getElementById(hs.slice(1));if(t)t.scrollIntoView()}}
+addEventListener('hashchange',route);route();
+var C=[
+['c08','AWS Machine Learning Scholarship','Udacity × AWS · 2021','aws',1],
+['c02','Designing Event-Driven Architectures','AWS Training · Dec 2022','aws',1],
+['c04','Architecting Serverless Applications','AWS Training · Dec 2022','aws',1],
+['c12','Sumo Logic Certified','Fundamentals · Mar 2021','sec',1],
+['c10','Certified Network Security Specialist','ICSI · Aug 2020','sec',1],
+['c01','Python Gold Badge','HackerRank','sec',1],
+['c03','AWS Lambda Foundations','AWS Training · Dec 2022','aws',0],
+['c05','Getting into the Serverless Mindset','AWS Training · Dec 2022','aws',0],
+['c06','AWS Technical Essentials','AWS Training · Sep 2020','aws',0],
+['c17','Big Data on AWS','Udemy · Sep 2020','aws',0],
+['c11','Star of the Quarter','Leadsquared · Oct to Dec 2021','award',0],
+['c13','Spotlight Award','Leadsquared · Jan 2021','award',0],
+['c07','AWS Summit India','Attendance · May 2022','event',0],
+['c09','AWS Summit Online India','Attendance · Jun 2021','event',0],
+['c15','Linux Essentials','NDG / Cisco Networking Academy · Feb 2021','learn',0],
+['c16','Cloud Skills Challenge Champion','Microsoft Ignite · 2020','learn',0],
+['c18','Agile Scrum Fundamentals','Udemy · Aug 2020','learn',0]];
+var grid=document.getElementById('certs-grid'),lb=document.getElementById('lb'),lbi=document.getElementById('lbi'),lbc=document.getElementById('lbc');
+C.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='cert';b.dataset.g=c[3];b.dataset.top=c[4];
+  b.innerHTML='<div class="im"><img loading="lazy" alt="'+c[1]+' certificate" src="'+IMG[c[0]]+'"></div><div class="tx"><b>'+c[1]+'</b><span>'+c[2]+'</span></div>';
+  b.addEventListener('click',function(){lbi.src=IMG[c[0]];lbi.alt=c[1];lbc.textContent=c[1]+' · '+c[2];lb.hidden=false;document.getElementById('lbx').focus()});
+  grid.appendChild(b)});
+function cfilter(g){document.querySelectorAll('#certs-grid .cert').forEach(function(e){e.hidden=!(g==='all'||(g==='top'?e.dataset.top==='1':e.dataset.g===g))});
+  document.querySelectorAll('#cf-filters button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.g===g)})}
+document.querySelectorAll('#cf-filters button').forEach(function(b){b.addEventListener('click',function(){cfilter(b.dataset.g)})});cfilter('top');
+function closeLb(){lb.hidden=true}
+document.getElementById('lbx').addEventListener('click',closeLb);lb.addEventListener('click',function(e){if(e.target===lb)closeLb()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLb()});
+[['nf','nok','Mockup only. Nothing was sent.'],['cf','cok','Mockup only. Nothing was sent.']].forEach(function(a){
+  document.getElementById(a[0]).addEventListener('submit',function(e){e.preventDefault();document.getElementById(a[1]).textContent=a[2]})});
+</script>
